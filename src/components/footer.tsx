@@ -29,7 +29,7 @@ export function Footer() {
             </p>
           </div>
 
-          <div>
+          <nav aria-label="Quick links">
             <h4 className="mb-3 text-sm font-semibold text-white uppercase tracking-wider">Quick Links</h4>
             <ul className="flex flex-col gap-2">
               {quickLinks.map((link) => (
@@ -40,9 +40,9 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
-          <div>
+          <nav aria-label="External resources">
             <h4 className="mb-3 text-sm font-semibold text-white uppercase tracking-wider">External Resources</h4>
             <ul className="flex flex-col gap-2">
               {externalLinks.map((link) => (
@@ -59,7 +59,7 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-4 border-t border-white/10 pt-8 sm:flex-row sm:justify-between">

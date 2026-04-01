@@ -113,8 +113,8 @@ export const statesData: StateData[] = [
   {
     state: "Goa",
     sanctuaries: [
-      s("Mhadei WLS", "https://en.wikipedia.org/wiki/Mhadei_Wildlife_Sanctuary", "Goa Foundation", "http://goafoundation.org/"),
-      s("Bhagwan Mahaveer WLS", "https://en.wikipedia.org/wiki/Bhagwan_Mahaveer_Sanctuary_and_Mollem_National_Park", "Goa Foundation", "http://goafoundation.org/"),
+      s("Mhadei WLS", "https://en.wikipedia.org/wiki/Mhadei_Wildlife_Sanctuary", "Goa Foundation", "https://goafoundation.org/"),
+      s("Bhagwan Mahaveer WLS", "https://en.wikipedia.org/wiki/Bhagwan_Mahaveer_Sanctuary_and_Mollem_National_Park", "Goa Foundation", "https://goafoundation.org/"),
       s("Mollem NP", "https://en.wikipedia.org/wiki/Bhagwan_Mahaveer_Sanctuary_and_Mollem_National_Park", "Goencho Ekvott"),
       s("Netravali WLS", "https://en.wikipedia.org/wiki/Netravali_Wildlife_Sanctuary"),
       s("Cotigao WLS", "https://en.wikipedia.org/wiki/Cotigao_Wildlife_Sanctuary"),
@@ -220,7 +220,6 @@ export const statesData: StateData[] = [
       s("Rajiv Gandhi NP", "https://en.wikipedia.org/wiki/Rajiv_Gandhi_National_Park", "Karnataka State Forest Department"),
       s("Ranganathittu Bird Sanctuary", "https://en.wikipedia.org/wiki/Ranganathittu_Bird_Sanctuary", "Bird Conservation Society of India"),
       s("Gudavi Bird Sanctuary", "https://en.wikipedia.org/wiki/Gudavi_Bird_Sanctuary", "BirdLife International", "https://www.birdlife.org/"),
-      s("Nanda Devi NP", "https://en.wikipedia.org/wiki/Nanda_Devi_National_Park", "Uttarakhand Forest Department", "https://forest.uk.gov.in/"),
     ],
   },
   {
@@ -321,7 +320,7 @@ export const statesData: StateData[] = [
       s("Simlipal TR", "https://en.wikipedia.org/wiki/Simlipal_National_Park", "Simlipal Tiger Reserve Foundation", "https://www.similipal.org/"),
       s("Kuldiha WLS", "https://en.wikipedia.org/wiki/Kuldiha_Wildlife_Sanctuary", "Odisha Forest Development Corporation", "https://www.odishafdc.com/"),
       s("Satkosia Gorge TR", "https://en.wikipedia.org/wiki/Satkosia_Tiger_Reserve", "Satkosia Foundation", "https://www.satkosia.org/"),
-      s("Nandankanan WLS", "https://en.wikipedia.org/wiki/Nandankanan_Zoological_Park", "Nandankanan Conservation Trust", "http://www.nandankanan.org"),
+      s("Nandankanan WLS", "https://en.wikipedia.org/wiki/Nandankanan_Zoological_Park", "Nandankanan Conservation Trust", "https://www.nandankanan.org"),
       s("Gahirmatha Marine Sanctuary", "https://en.wikipedia.org/wiki/Gahirmatha_Marine_Sanctuary", "Gahirmatha Sea Turtle Conservation Society"),
       s("Bhitarkanika WLS", "https://en.wikipedia.org/wiki/Bhitarkanika_National_Park", "Bhitarkanika Conservation Society", "https://www.bhitarkanika.org"),
     ],
@@ -379,7 +378,7 @@ export const statesData: StateData[] = [
   {
     state: "Tamil Nadu",
     sanctuaries: [
-      s("Sathyamangalam WLS", "https://en.wikipedia.org/wiki/Sathyamangalam_Wildlife_Sanctuary", "Tamil Nadu Forest Department", "http://forests.tn.gov.in"),
+      s("Sathyamangalam WLS", "https://en.wikipedia.org/wiki/Sathyamangalam_Wildlife_Sanctuary", "Tamil Nadu Forest Department", "https://forests.tn.gov.in"),
       s("Mudumalai NP", "https://en.wikipedia.org/wiki/Mudumalai_National_Park", "Mudumalai Conservation Trust"),
       s("Kalakad-Mundanthurai TR", "https://en.wikipedia.org/wiki/Kalakad_Mundanthurai_Tiger_Reserve", "Wild Tiger Foundation", "https://www.wildtiger.org"),
       s("Point Calimere Sanctuary", "https://en.wikipedia.org/wiki/Point_Calimere_Wildlife_and_Bird_Sanctuary", "Nature Conservation Society", "https://ncs.org.in/"),
@@ -431,6 +430,7 @@ export const statesData: StateData[] = [
       s("Binsar WLS", "https://en.wikipedia.org/wiki/Binsar_Wildlife_Sanctuary"),
       s("Nandhaur WLS", "https://en.wikipedia.org/wiki/Nandhaur_Wildlife_Sanctuary"),
       s("Benog WLS", "https://en.wikipedia.org/wiki/Benog_Wildlife_Sanctuary"),
+      s("Nanda Devi NP", "https://en.wikipedia.org/wiki/Nanda_Devi_National_Park", "Uttarakhand Forest Department", "https://forest.uk.gov.in/"),
     ],
   },
 ];

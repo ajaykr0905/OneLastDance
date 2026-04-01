@@ -72,6 +72,15 @@
   100% { opacity: 0; }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -101,8 +110,20 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #16a34a, #0d9488, #059669);
+  background: linear-gradient(135deg, oklch(0.55 0.18 150), oklch(0.55 0.15 180), oklch(0.50 0.18 160));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
