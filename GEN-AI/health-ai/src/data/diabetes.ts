@@ -50,6 +50,137 @@ export const diabetesStats = {
   ],
 };
 
+export interface RiskFactor {
+  name: string;
+  points: number;
+  message: string;
+}
+
+export interface MetricComparison {
+  metric: string;
+  value: number;
+  datasetMean: number;
+  status: "normal" | "borderline" | "high";
+}
+
+export interface RiskResult {
+  level: "low" | "moderate" | "high" | "very-high";
+  score: number;
+  factors: RiskFactor[];
+  comparisons: MetricComparison[];
+  recommendation: string;
+}
+
+export interface FullAssessmentInput {
+  age: number;
+  glucose: number;
+  bloodPressure: number;
+  bmi: number;
+  insulin?: number;
+  skinThickness?: number;
+  pregnancies?: number;
+  familyHistory: boolean;
+}
+
+function compareToMean(value: number, mean: number, highThreshold: number, borderlineThreshold: number): MetricComparison["status"] {
+  if (value > highThreshold) return "high";
+  if (value > borderlineThreshold) return "borderline";
+  return "normal";
+}
+
+export function assessDiabetesRiskFull(input: FullAssessmentInput): RiskResult {
+  const factors: RiskFactor[] = [];
+  let score = 0;
+
+  if (input.glucose > 140) {
+    const pts = 25; score += pts;
+    factors.push({ name: "Glucose", points: pts, message: `Very high glucose at ${input.glucose} mg/dL (threshold: 140)` });
+  } else if (input.glucose > 120) {
+    const pts = 12; score += pts;
+    factors.push({ name: "Glucose", points: pts, message: `Elevated glucose at ${input.glucose} mg/dL (threshold: 120)` });
+  } else if (input.glucose > 100) {
+    const pts = 5; score += pts;
+    factors.push({ name: "Glucose", points: pts, message: `Mildly elevated glucose at ${input.glucose} mg/dL` });
+  }
+
+  if (input.bmi > 40) {
+    const pts = 20; score += pts;
+    factors.push({ name: "BMI", points: pts, message: `Severe obesity with BMI ${input.bmi.toFixed(1)} (Class III)` });
+  } else if (input.bmi > 35) {
+    const pts = 16; score += pts;
+    factors.push({ name: "BMI", points: pts, message: `Obese with BMI ${input.bmi.toFixed(1)} (Class II)` });
+  } else if (input.bmi > 30) {
+    const pts = 10; score += pts;
+    factors.push({ name: "BMI", points: pts, message: `Overweight with BMI ${input.bmi.toFixed(1)} (Class I)` });
+  }
+
+  if (input.age > 60) {
+    const pts = 15; score += pts;
+    factors.push({ name: "Age", points: pts, message: `Age ${input.age} significantly increases risk` });
+  } else if (input.age > 50) {
+    const pts = 12; score += pts;
+    factors.push({ name: "Age", points: pts, message: `Age ${input.age} is a notable risk factor` });
+  } else if (input.age > 40) {
+    const pts = 8; score += pts;
+    factors.push({ name: "Age", points: pts, message: `Age ${input.age} carries moderate risk` });
+  }
+
+  if (input.bloodPressure > 100) {
+    const pts = 10; score += pts;
+    factors.push({ name: "Blood Pressure", points: pts, message: `High diastolic BP at ${input.bloodPressure} mm Hg (>100)` });
+  } else if (input.bloodPressure > 90) {
+    const pts = 5; score += pts;
+    factors.push({ name: "Blood Pressure", points: pts, message: `Elevated diastolic BP at ${input.bloodPressure} mm Hg (>90)` });
+  }
+
+  if (input.familyHistory) {
+    const pts = 15; score += pts;
+    factors.push({ name: "Family History", points: pts, message: "Genetic predisposition to diabetes" });
+  }
+
+  if (input.insulin !== undefined && input.insulin > 150) {
+    const pts = 8; score += pts;
+    factors.push({ name: "Insulin", points: pts, message: `Elevated insulin at ${input.insulin} mu U/ml may indicate resistance` });
+  } else if (input.insulin !== undefined && input.insulin > 100) {
+    const pts = 4; score += pts;
+    factors.push({ name: "Insulin", points: pts, message: `Mildly elevated insulin at ${input.insulin} mu U/ml` });
+  }
+
+  if (input.skinThickness !== undefined && input.skinThickness > 40) {
+    const pts = 3; score += pts;
+    factors.push({ name: "Skin Thickness", points: pts, message: `Elevated triceps skin fold at ${input.skinThickness} mm` });
+  }
+
+  if (input.pregnancies !== undefined && input.pregnancies >= 6) {
+    const pts = 5; score += pts;
+    factors.push({ name: "Pregnancies", points: pts, message: `${input.pregnancies} pregnancies increases gestational diabetes risk` });
+  }
+
+  score = Math.min(score, 100);
+
+  const comparisons: MetricComparison[] = [
+    { metric: "Glucose (mg/dL)", value: input.glucose, datasetMean: 120.89, status: compareToMean(input.glucose, 120.89, 140, 120) },
+    { metric: "Blood Pressure (mm Hg)", value: input.bloodPressure, datasetMean: 69.11, status: compareToMean(input.bloodPressure, 69.11, 90, 80) },
+    { metric: "BMI", value: input.bmi, datasetMean: 31.99, status: compareToMean(input.bmi, 31.99, 35, 30) },
+    { metric: "Age", value: input.age, datasetMean: 33.24, status: compareToMean(input.age, 33.24, 50, 40) },
+  ];
+
+  if (input.insulin !== undefined) {
+    comparisons.push({ metric: "Insulin (mu U/ml)", value: input.insulin, datasetMean: 79.80, status: compareToMean(input.insulin, 79.80, 150, 100) });
+  }
+
+  const level: RiskResult["level"] = score >= 60 ? "very-high" : score >= 40 ? "high" : score >= 20 ? "moderate" : "low";
+
+  const recommendations: Record<RiskResult["level"], string> = {
+    "low": "Your risk profile is favorable. Maintain a healthy diet, regular exercise, and schedule routine checkups.",
+    "moderate": "Some risk factors detected. Consider lifestyle modifications — regular exercise, balanced diet, weight management. Schedule a fasting glucose test with your doctor.",
+    "high": "Multiple risk factors present. Strongly recommend consulting a healthcare provider for comprehensive metabolic screening including HbA1c testing.",
+    "very-high": "Significant risk factors detected. Urgent medical consultation recommended. Request a full metabolic panel including fasting glucose, HbA1c, and lipid profile.",
+  };
+
+  return { level, score, factors, comparisons, recommendation: recommendations[level] };
+}
+
 export function assessDiabetesRisk(input: {
   glucose?: number;
   bmi?: number;
@@ -57,26 +188,21 @@ export function assessDiabetesRisk(input: {
   bloodPressure?: number;
   familyHistory?: boolean;
 }): { level: "low" | "moderate" | "high" | "very-high"; score: number; factors: string[] } {
-  let score = 0;
-  const factors: string[] = [];
+  const result = assessDiabetesRiskFull({
+    glucose: input.glucose ?? 100,
+    bmi: input.bmi ?? 25,
+    age: input.age ?? 30,
+    bloodPressure: input.bloodPressure ?? 70,
+    familyHistory: input.familyHistory ?? false,
+  });
+  return { level: result.level, score: result.score, factors: result.factors.map((f) => f.message) };
+}
 
-  if (input.glucose !== undefined) {
-    if (input.glucose > 140) { score += 30; factors.push("High glucose (>140 mg/dL)"); }
-    else if (input.glucose > 120) { score += 15; factors.push("Elevated glucose (>120 mg/dL)"); }
-  }
-  if (input.bmi !== undefined) {
-    if (input.bmi > 35) { score += 25; factors.push("Obese (BMI >35)"); }
-    else if (input.bmi > 30) { score += 15; factors.push("Overweight (BMI >30)"); }
-  }
-  if (input.age !== undefined) {
-    if (input.age > 50) { score += 15; factors.push("Age above 50"); }
-    else if (input.age > 40) { score += 10; factors.push("Age above 40"); }
-  }
-  if (input.bloodPressure !== undefined && input.bloodPressure > 90) {
-    score += 10; factors.push("High blood pressure (>90 mm Hg)");
-  }
-  if (input.familyHistory) { score += 20; factors.push("Family history of diabetes"); }
-
-  const level = score >= 60 ? "very-high" : score >= 40 ? "high" : score >= 20 ? "moderate" : "low";
-  return { level, score, factors };
+export function getBmiCategory(bmi: number): { label: string; color: string } {
+  if (bmi < 18.5) return { label: "Underweight", color: "text-blue-600 bg-blue-50" };
+  if (bmi < 25) return { label: "Normal", color: "text-green-600 bg-green-50" };
+  if (bmi < 30) return { label: "Overweight", color: "text-amber-600 bg-amber-50" };
+  if (bmi < 35) return { label: "Obese I", color: "text-orange-600 bg-orange-50" };
+  if (bmi < 40) return { label: "Obese II", color: "text-red-500 bg-red-50" };
+  return { label: "Obese III", color: "text-red-700 bg-red-50" };
 }
