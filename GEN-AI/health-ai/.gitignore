@@ -1,7 +1,9 @@
-GEN-AI/GEN_AI-Hackathon/
 node_modules/
 .next/
-.DS_Store
+out/
+.env
 .env.local
+.env.*.local
 *.tsbuildinfo
 next-env.d.ts
+.DS_Store
