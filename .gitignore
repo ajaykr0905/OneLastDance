@@ -1,0 +1,4 @@
+GEN-AI/
+node_modules/
+.next/
+.DS_Store
